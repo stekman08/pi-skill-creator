@@ -1,48 +1,58 @@
 # Pi Skill Creator
 
-A Pi-native skill for creating, reviewing, improving, evaluating, and packaging Agent Skills.
+A Pi-native skill for creating, reviewing, improving, evaluating, and packaging [Agent Skills](https://agentskills.io/).
 
-This repository is a fork of [Anthropic's skills repository](https://github.com/anthropics/skills). The `skills/skill-creator/` directory is adapted for Pi. Claude Code-specific runners, commands, paths, and authentication are intentionally not part of the Pi workflow.
+This repository is a Pi adaptation of the [Anthropic skills repository](https://github.com/anthropics/skills). The adaptation keeps the upstream skill-writing guidance while providing a workflow that fits Pi's session and tool model.
 
-## Install in Pi
+## Install
 
-From this checkout, install the canonical skill with a symlink:
+Clone this repository, then link the skill into Pi's global skill directory:
 
 ```bash
+git clone https://github.com/stekman08/pi-skill-creator.git ~/.agent-config/pi/skill-creator
 mkdir -p ~/.pi/agent/skills
 ln -sfn "$HOME/.agent-config/pi/skill-creator/skills/skill-creator" \
   "$HOME/.pi/agent/skills/skill-creator"
 ```
 
-Reload Pi after installing. The source of truth is the checkout in `~/.agent-config/pi/skill-creator`; the link is only Pi's discovery path.
+If the repository is already checked out, only the symlink command is needed. Reload Pi after installation.
 
 ## Use
 
-After reload, ask Pi to create or improve a skill. Examples:
+Ask Pi to create or improve a skill. For example:
 
 - `Create a skill for reviewing database migrations.`
 - `Review the prose and trigger description in ~/.pi/agent/skills/my-skill.`
 - `Help me evaluate this skill with realistic test prompts.`
 - `Package the finished skill for distribution.`
 
-The skill first clarifies intent when needed, then drafts or inspects the skill, reviews its prose, proposes realistic eval cases, and iterates from evidence. Formal assertions are useful for objectively checkable behavior; subjective writing quality remains a human judgment.
+The workflow clarifies intent when needed, drafts or inspects the skill, reviews its prose and trigger description, proposes realistic evaluation cases, and iterates from evidence.
 
 ## Evaluation workflow
 
-The skill supports an inline Pi workflow:
-
 1. Save accepted cases in `evals/evals.json`.
-2. Run with the skill and, where useful, a baseline without it.
+2. Run the cases with the skill and, when useful, a baseline without it.
 3. Store outputs under `~/.pi/skill-workspaces/<skill-name>/iteration-N/`.
-4. Add only meaningful objective assertions.
+4. Add only meaningful assertions for objectively checkable outcomes.
 5. Generate a static review with `eval-viewer/generate_review.py` when visual comparison helps.
-6. Iterate only after reviewing the outputs and feedback.
+6. Review the outputs and feedback before changing the skill.
+7. Repeat with a new iteration directory when the change is substantial.
 
-The bundled Python utilities validate structure, aggregate compatible result directories, generate a review, and package skills. Inspect a script before use and do not assume an external runner is available.
+Qualitative review remains important for prose, usability, and judgment-heavy results. Quantitative scores should support that review, not replace it.
 
-## Upstream updates
+## Repository layout
 
-The fork tracks Anthropics as `upstream`:
+```text
+skills/skill-creator/
+  SKILL.md
+  references/       evaluation schemas
+  eval-viewer/      static human-review page generator
+  scripts/          validation, aggregation, and packaging tools
+```
+
+## Updating from upstream
+
+The local checkout has the upstream repository configured as the `upstream` remote. To review and integrate new upstream changes:
 
 ```bash
 git fetch upstream
@@ -50,18 +60,8 @@ git diff HEAD..upstream/main -- skills/skill-creator
 git merge upstream/main
 ```
 
-Review conflicts manually. Preserve Pi-specific adaptations, update this README and `skills/skill-creator/SKILL.md` when upstream changes affect them, then run validation. Do not push changes to `upstream` or create an upstream PR unless explicitly requested.
+Review the resulting diff carefully. Preserve intentional Pi adaptations, update the README and `SKILL.md` when needed, run validation, and commit the result to this fork. The upstream remote is read-only for this project; upstream changes are not published from this repository.
 
-## Layout
+## Scope
 
-```text
-skills/skill-creator/
-  SKILL.md
-  references/       eval schemas
-  eval-viewer/      static human-review page generator
-  scripts/          validation, aggregation, packaging
-```
-
-## Limitations
-
-Pi does not provide the Claude Code `claude -p` runner used by the upstream implementation. This port does not require Claude Code or Claude authentication. Runs are performed inline unless the user explicitly supplies another compatible runner.
+This repository contains the complete upstream source tree, while `skills/skill-creator/` is the maintained Pi adaptation. Other directories are retained to make upstream comparison and future selective updates possible; they are not installed by the symlink above.
