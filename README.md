@@ -64,4 +64,4 @@ skills/skill-creator/
 
 ## Limitations
 
-Pi does not provide the Claude Code `claude -p` runner used by the upstream implementation. This port does not require Claude Code, Claude authentication, tmux, or Pi's tmux-based subagent plugin. Runs are performed inline unless the user explicitly supplies another compatible runner.
+Pi does not provide the Claude Code `claude -p` runner used by the upstream implementation. This port does not require Claude Code or Claude authentication. Runs are performed inline unless the user explicitly supplies another compatible runner.

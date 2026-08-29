@@ -95,7 +95,7 @@ Use these resources as needed:
 - `scripts/package_skill.py` for packaging a validated skill.
 - `scripts/aggregate_benchmark.py` for aggregating compatible result directories.
 
-Do not require subagents, tmux, `claude -p`, or Claude Code. Pi can complete the normal workflow in the main session. If a separate agent or external runner is available, treat it as an optional enhancement and preserve an inline fallback.
+Do not require external agent orchestration or another coding-agent CLI. Pi can complete the normal workflow in the main session. If a separate agent or compatible runner is available, treat it as an optional enhancement and preserve an inline fallback.
 
 ## Finish and install
 
