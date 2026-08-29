@@ -64,4 +64,4 @@ Review the resulting diff carefully. Preserve intentional Pi adaptations, update
 
 ## Scope
 
-This repository contains the complete upstream source tree, while `skills/skill-creator/` is the maintained Pi adaptation. Other directories are retained to make upstream comparison and future selective updates possible; they are not installed by the symlink above.
+This repository retains the upstream skill collection needed for comparison and future selective updates, while `skills/skill-creator/` is the maintained Pi adaptation. Only that directory is installed by the symlink above.
